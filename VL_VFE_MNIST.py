@@ -184,7 +184,7 @@ def test(args, model, device, test_loader,noise = 0.2):
 
 def main_train():
     kwargs = {'num_workers': 1, 'pin_memory': True}
-    test_loader = torch.utils.data.DataLoader(datasets.MNIST('./data', train=False, transform=transforms.Compose([
+    test_loader = torch.utils.data.DataLoader(datasets.MNIST('./data', train=False, download=True, transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
                        ])),
@@ -236,7 +236,7 @@ def main_test():
         batch_size=args.test_batch_size, shuffle=True, **kwargs)
 
     model = Net(args).to(device)
-    model.load_state_dict(torch.load(args.weights)['model'])
+    model.load_state_dict(torch.load(args.weights, map_location=torch.device('cpu'))['model'])
 
     accuracy = 0
     t = 20
